@@ -11,9 +11,10 @@ const ClientList = () => {
   const LoadEdit = (id) => {
     navigate("/employee/edit/" + id);
   };
+  
   const Removefunction = (id) => {
     if (window.confirm("Do you want to remove?")) {
-      fetch("http://localhost:8000/users/" + id, {
+      fetch("http://localhost:8000/v1/clients/" + id, {
         method: "DELETE",
       })
         .then((res) => {

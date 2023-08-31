@@ -33,7 +33,7 @@ const AddClient = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/addclient",
+        "http://localhost:8000/v1/addclient",
         clientdata,
         {
           headers: {
@@ -177,7 +177,7 @@ const AddClient = () => {
                       <button className="btn btn-success" type="submit">
                         Save
                       </button>
-                      <Link to="/" className="btn btn-danger">
+                      <Link to="/login" className="btn btn-danger">
                         Back
                       </Link>
                     </div>
