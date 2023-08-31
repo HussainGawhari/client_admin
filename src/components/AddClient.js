@@ -32,19 +32,19 @@ const AddClient = () => {
     console.log("clientdata", clientdata);
 
     try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
       const response = await axios.post(
         "http://localhost:8000/v1/addclient",
-        clientdata,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        clientdata,{headers}
+        
       );
       // console.log(response)
 
       if (response.status === 200) {
-        alert("Saved successfully.");
+        navigate("/list")
       } else {
         console.log("Request failed with status:", response.status);
       }

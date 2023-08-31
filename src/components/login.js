@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 
 const LoginPage = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState(false);
   const [loginUser, setLoginUser] = useState({
     email: "",
     password: "",
@@ -32,10 +32,11 @@ const LoginPage = () => {
         const token = data.Token;
         console.log('Login successful', token);
         localStorage.setItem('token', token);
-       
+        navigate("/list");
         setLoggedIn(true);
+        console.log('Login in', loggedIn);
         if (loggedIn) {
-          navigate("/");
+         console.log('Logged in')
         }
       } else {
         console.log('Login failed');

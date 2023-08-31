@@ -3,18 +3,23 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 const ClientDetails = () => {
-  const { clientid } = useParams();
-
+  const { id } = useParams();
+console.log("ClientDetails",id);
   const [empdata, empdatachange] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:8000/clients" + clientid)
-      .then((res) => {
-        return res.json();
-      })
-      .then((resp) => {
-        console.log(resp);
-        empdatachange(resp);
+    const token = localStorage.getItem('token');
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    console.log(headers);
+    
+    axios.get(`http://localhost:8000/v1/client/${id}`, { headers })
+      .then(response => {
+       
+        // Handle the response from the server
+        // setClientData(response.data);
+        console.log("response from bakend", response.data)
       })
       .catch((err) => {
         console.log(err.message);

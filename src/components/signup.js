@@ -1,9 +1,6 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
-// import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-
-// import { register } from "../redux/features/authSlice";
-
 const SignUpPage = () => {
 
  
@@ -22,12 +19,23 @@ const SignUpPage = () => {
   }, []);
 
   const submitHandler = (e) => {
+  //  const headers = {
+  //     "Content-Type": "application/json"
+  //   }
+  const config = {
+    header: { "content-type": "multipart/form-data" },
+  };
     e.preventDefault();
     if (email && password && name && role) {
       console.log("befor ");
      
       console.log(signUpUser);
       console.log("after ");
+
+      axios.post("http://localhost:8000/singup/",signUpUser,config )
+      .then((response) => {
+        console.log(" testing responze", response.data);
+      })
     }
   };
 

@@ -12,11 +12,12 @@ function App() {
       <h1>Client data operations</h1>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ClientList />}></Route>
-          <Route path="/detail/:cid" element={<ClientDetails />}></Route>
-          <Route path="/edit/:cid" element={<EditeClient />}></Route>
+          <Route path="/" element={<LoginPage />}></Route>
+          <Route path="/details/:id" element={<ClientDetails />}></Route>
+          <Route path="/edit/:id" element={<EditeClient />}></Route>
+          <Route path="/list" element={<ClientList />}></Route>
           <Route path="/create" element={<AddClient />}></Route>
-          <Route path="/add" element={<AddClient />}></Route>
+          <Route path="/addclient" element={<AddClient />}></Route>
           <Route path="/register" element={<SignUpPage />}></Route>
           
         </Routes>

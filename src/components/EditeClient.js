@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const EditeClient = () => {
-  const { clientId } = useParams();
+  const { id } = useParams();
 
-  const [id, idchange] = useState("");
+  // const [id, idchange] = useState("");
   const [name, namechange] = useState("");
   const [email, emailchange] = useState("");
   const [phone, phonechange] = useState("");
@@ -17,7 +17,7 @@ const EditeClient = () => {
     e.preventDefault();
     const clientdata = { id, name, email, phone, active };
 
-    fetch("http://localhost:8000/client/" + clientId, {
+    fetch("http://localhost:8000/client/" + id, {
       method: "PUT",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(clientdata),

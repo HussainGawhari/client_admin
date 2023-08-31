@@ -1,45 +1,52 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import axios from "axios";
 const ClientList = () => {
-  const [empdata, empdatachange] = useState();
+  const [clientdata, setClientData] = useState();
   const navigate = useNavigate();
 
   const LoadDetail = (id) => {
-    navigate("/employee/detail/" + id);
+    navigate("/details/" + id);
   };
   const LoadEdit = (id) => {
-    navigate("/employee/edit/" + id);
+    navigate("/edit/" + id);
   };
   
   const Removefunction = (id) => {
+    const token = localStorage.getItem('token');
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
     if (window.confirm("Do you want to remove?")) {
-      fetch("http://localhost:8000/v1/clients/" + id, {
-        method: "DELETE",
+      axios.delete(`http://localhost:8000/v1/client/${id}`, { headers })
+      .then(response => {
+        // Handle the response from the server
+        setClientData(response.data);
+        console.log(response)
       })
-        .then((res) => {
-          alert("Removed successfully.");
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
+      
+      
     }
   };
 
   useEffect(() => {
-    fetch("http://localhost:8000/clients")
-      .then((res) => {
-        return res.json();
+   const token = localStorage.getItem('token');
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    console.log(headers);
+    
+    axios.get("http://localhost:8000/v1/clients", { headers })
+      .then(response => {
+        // Handle the response from the server
+        setClientData(response.data);
+        console.log(response)
       })
-      .then((resp) => {
-        empdatachange(resp);
-      })
-      .catch((err) => {
-        console.log(err.message);
+      .catch(error => {
+        // Handle errors
       });
-  }, []);
-  console.log(empdata);
+  }, [clientdata]);
+  console.log(clientdata);
   return (
     <div className="container">
       <div className="card">
@@ -48,7 +55,7 @@ const ClientList = () => {
         </div>
         <div className="card-body">
           <div className="divbtn">
-            <Link to="client/create" className="btn btn-success">
+            <Link to="/addclient" className="btn btn-success">
               Add client (+)
             </Link>
           </div>
@@ -64,8 +71,8 @@ const ClientList = () => {
               </tr>
             </thead>
             <tbody>
-              {empdata &&
-                empdata.data.map((item) => (
+              {clientdata &&
+                clientdata.data.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>
@@ -89,8 +96,11 @@ const ClientList = () => {
                         Edit
                       </a>
                       <a
-                        onClick={() => {
-                          Removefunction(item.id);
+                        onClick={(e) => {
+                          e.preventDefault()
+                          Removefunction(item.id)
+                         
+                          
                         }}
                         className="btn btn-danger"
                       >
@@ -115,4 +125,4 @@ const ClientList = () => {
   );
 };
 
-export default ClientList;
+export default ClientList ;
