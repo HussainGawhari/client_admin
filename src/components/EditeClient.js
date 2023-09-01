@@ -1,43 +1,67 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const EditeClient = () => {
   const { id } = useParams();
 
   // const [id, idchange] = useState("");
-  const [name, namechange] = useState("");
-  const [email, emailchange] = useState("");
-  const [phone, phonechange] = useState("");
-  const [active, activechange] = useState(true);
-  const [validation, valchange] = useState(false);
+  const [first_name, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [telephone, setPhone] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [status, setStatus] = useState(true);
+  const [postal_code, setPostalCode] = useState("");
 
   const navigate = useNavigate();
 
-  const handlesubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const clientdata = { id, name, email, phone, active };
 
-    fetch("http://localhost:8000/client/" + id, {
-      method: "PUT",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(clientdata),
-    })
-      .then((res) => {
-        alert("Saved successfully.");
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    const clientdata = {
+      first_name,
+      last_name,
+      telephone,
+      email,
+      status,
+      street,
+      postal_code,
+      city,
+      country,
+    };
+
+    try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      const response = await axios.put(
+        `http://localhost:8000/v1/client/${id}`,
+        clientdata,{headers}
+        
+      );
+      // console.log(response)
+
+      if (response.status === 200) {
+        navigate("/list")
+      } else {
+        console.log("Request failed with status:", response.status);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
   return (
     <div>
       <div className="row">
         <div className="offset-lg-3 col-lg-6">
-          <form className="container" onSubmit={handlesubmit}>
+          <form className="container" onSubmit={handleSubmit}>
             <div className="card" style={{ textAlign: "left" }}>
               <div className="card-title">
-                <h2>User Edit</h2>
+                <h2> Edit Client</h2>
               </div>
               <div className="card-body">
                 <div className="row">
@@ -51,20 +75,36 @@ const EditeClient = () => {
                       ></input>
                     </div>
                   </div>
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>First Name</label>
+                      <input
+                        required
+                        value={first_name}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="form-control"
+                      ></input>
+                      <label>Last Name</label>
+                      <input
+                        required
+                        value={last_name}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="form-control"
+                      ></input>
+                      {/* {name.length == 0 && validation && (
+                        <span className="text-danger">Enter the name</span>
+                      )} */}
+                    </div>
+                  </div>
 
                   <div className="col-lg-12">
                     <div className="form-group">
-                      <label>Name</label>
+                      <label>Phone</label>
                       <input
-                        required
-                        value={name}
-                        onMouseDown={(e) => valchange(true)}
-                        onChange={(e) => namechange(e.target.value)}
+                        value={telephone}
+                        onChange={(e) => setPhone(e.target.value)}
                         className="form-control"
                       ></input>
-                      {name.length == 0 && validation && (
-                        <span className="text-danger">Enter the name</span>
-                      )}
                     </div>
                   </div>
 
@@ -73,7 +113,7 @@ const EditeClient = () => {
                       <label>Email</label>
                       <input
                         value={email}
-                        onChange={(e) => emailchange(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="form-control"
                       ></input>
                     </div>
@@ -81,20 +121,51 @@ const EditeClient = () => {
 
                   <div className="col-lg-12">
                     <div className="form-group">
-                      <label>Phone</label>
+                      <label>Street</label>
                       <input
-                        value={phone}
-                        onChange={(e) => phonechange(e.target.value)}
+                        value={street}
+                        onChange={(e) => setStreet(e.target.value)}
                         className="form-control"
                       ></input>
                     </div>
                   </div>
 
                   <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>Postal code</label>
+                      <input
+                        value={postal_code}
+                        onChange={(e) => setPostalCode(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
+                  </div>
+
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>City</label>
+                      <input
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      <label>Country</label>
+                      <input
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        className="form-control"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="col-lg-12">
                     <div className="form-check">
                       <input
-                        checked={active}
-                        onChange={(e) => activechange(e.target.checked)}
+                        checked={status}
+                        onChange={(e) => setStatus(e.target.checked)}
                         type="checkbox"
                         className="form-check-input"
                       ></input>
@@ -106,7 +177,7 @@ const EditeClient = () => {
                       <button className="btn btn-success" type="submit">
                         Save
                       </button>
-                      <Link to="/" className="btn btn-danger">
+                      <Link to="/list" className="btn btn-danger">
                         Back
                       </Link>
                     </div>

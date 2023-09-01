@@ -45,7 +45,7 @@ const ClientList = () => {
       .catch(error => {
         // Handle errors
       });
-  }, [clientdata]);
+  }, [10]);
   console.log(clientdata);
   return (
     <div className="container">
@@ -71,7 +71,7 @@ const ClientList = () => {
               </tr>
             </thead>
             <tbody>
-              {clientdata &&
+              {clientdata && 
                 clientdata.data.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
